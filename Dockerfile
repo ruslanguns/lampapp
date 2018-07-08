@@ -42,11 +42,16 @@ COPY myapp.conf /etc/apache2/sites-available/
 COPY php5 /etc/
 
 # Install sshd
-RUN apt-get install -y openssh-server
+RUN apt-get update && apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
 
 # Set password to 'admin'
-RUN printf admin\\nadmin\\n | passwd
+RUN printf rootPassword\\nrootPassword\\n | passwd
+
+# Instalacion de phpmyadmin
+RUN apt-get install -y phpmyadmin apache2-utils 
+
+RUN echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
 
 #Elimiando example.com.conf de apache2 ya que no lo usaremos
 RUN  rm -rf /etc/apache2/sites-available/example.com.conf \
